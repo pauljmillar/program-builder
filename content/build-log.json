@@ -32,7 +32,7 @@
       "date": "2026-11-01",
       "hours": 0.5,
       "phase": "Phase 1: Scaffold",
-      "shipped": "Repo initialized, pushed to GitHub. Next.js App Router + TypeScript + Tailwind scaffold. Design tokens and free font substitutes (EB Garamond, Inter, JetBrains Mono) wired in. Page shells for /, /why, /build-log, /how-it-works. CI workflow (lint, typecheck, build). First Vercel deploy.",
+      "shipped": "Repo initialized and pushed to GitHub (github.com/pauljmillar/program-builder). Next.js App Router + TypeScript + Tailwind scaffold. Design tokens and free font substitutes (EB Garamond, Inter, JetBrains Mono) wired in. Page shells for /, /why, /build-log, /how-it-works. CI workflow (lint, typecheck, build).",
       "tools": ["Claude Code (Sonnet 5)"]
     }
   ],
@@ -40,7 +40,24 @@
     { "tool": "Claude (Opus 5.5) in the Claude app", "usedFor": "Research, ideation, specs" },
     { "tool": "Claude Code (Sonnet 5)", "usedFor": "Scaffold, schema, checker, generation pipeline, UI, eval harness, deployment" }
   ],
-  "failures": [],
+  "failures": [
+    {
+      "title": "CI failed on first push: conflicting pnpm versions",
+      "whatHappened": "The CI workflow pinned `pnpm/action-setup@v4` to version 10 while package.json's `packageManager` field pinned pnpm@10.32.1. pnpm's own version check treats those as two different sources of truth and refuses to run.",
+      "howCaught": "First GitHub Actions run on main failed immediately in the 'Run pnpm/action-setup@v4' step, before lint/typecheck/build even started.",
+      "fix": "Dropped the explicit `version: 10` from the workflow step so action-setup reads the version from package.json's packageManager field instead.",
+      "commit": "41dd9e0 (bug introduced in cf40242)",
+      "lesson": "When package.json already pins a packageManager version, don't also pin it in CI config — pick one source of truth."
+    },
+    {
+      "title": "CI typecheck failed: Next.js's generated route types weren't there yet",
+      "whatHappened": "`app/layout.tsx` uses Next.js's typed-routes `LayoutProps<'/'>` global, which only exists once Next.js has generated `.next/types` (gitignored). CI ran a standalone `tsc --noEmit` before anything had generated those types, so it failed on `Cannot find name 'LayoutProps'` even though `pnpm build` passed fine locally (build generates the types itself first).",
+      "howCaught": "Second CI run still failed, now in the typecheck step specifically, right after fixing the pnpm version issue.",
+      "fix": "Added a `next typegen` step before `pnpm typecheck` in CI, which generates just the route types without a full build.",
+      "commit": "pending (fix for 41dd9e0)",
+      "lesson": "A typed-routes feature means `tsc --noEmit` alone isn't a complete typecheck in CI — it depends on a generation step that `next build`/`next dev` normally does implicitly."
+    }
+  ],
   "keptVsRewritten": { "keptPct": 0, "rewrittenAreas": [] },
   "cost": {
     "ideation": "",
