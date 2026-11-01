@@ -41,6 +41,13 @@
       "phase": "Phase 2: Schema and checker",
       "shipped": "Zod schema for the full program (lib/schema.ts) with JSON Schema export via zod's native toJSONSchema. estimateMinutes formula. All 10 checker rules from spec §6 (lib/validate/rules/*), each with a passing and a breaking Vitest case. Added pnpm test to CI.",
       "tools": ["Claude Code (Sonnet 5)"]
+    },
+    {
+      "date": "2026-11-01",
+      "hours": 1.0,
+      "phase": "Phase 3: Generation pipeline",
+      "shipped": "Sequential 7-step generation pipeline (lib/generate), one Claude tool-use call per section, versioned prompts (lib/prompts/v1), and the checker + repair loop (max 2 rounds). `pnpm build-program \"<prompt>\"` runs it end to end. Verified with two real API calls: a clean sample prompt (zero issues on the first pass) and a deliberately contradictory one (\"$10,000 fund... awards up to $50,000\") that correctly left an unresolvable PROMPT_CONFLICT in `remaining` after 2 repair rounds, rather than silently picking a number.",
+      "tools": ["Claude Code (Sonnet 5)"]
     }
   ],
   "tools": [
@@ -71,6 +78,14 @@
       "fix": "Tracked the index ranges already claimed by award-amount matches and skip any money mention inside those ranges when scanning for a fund total.",
       "commit": "e35c3b6",
       "lesson": "A regex-based extractor needs to track which spans of text it's already consumed, or a second heuristic pass will double-count the same number under a different label."
+    },
+    {
+      "title": "First live API calls rejected the tool schema and the forced tool_choice",
+      "whatHappened": "Three real 400s from the Anthropic API on the first live run of the generation pipeline: (1) zod's exclusiveMinimum keyword (from `.positive()`) isn't supported in a tool's input_schema; (2) setting `strict: true` on the tool turned on a much more restricted schema subset that rejected even plain `minimum`; (3) with strict mode removed, the forced `tool_choice: {type: \"tool\", name}` itself came back \"not supported for this model.\"",
+      "howCaught": "Running `pnpm build-program` against a real sample prompt with a real API key, per spec §0.7 — not caught by any unit test, since those don't hit the live API.",
+      "fix": "Changed `.positive()` to `.min(1)` in lib/schema.ts, dropped `strict: true` from the tool definition, and dropped the forced tool_choice entirely (tool_choice defaults to \"auto\", and with exactly one tool offered the model calls it every time in practice).",
+      "commit": "pending",
+      "lesson": "The SDK's types don't tell you which JSON Schema keywords or tool_choice modes a given model actually accepts — that only shows up by calling the real API. Budget for this on any new model or SDK version."
     }
   ],
   "keptVsRewritten": { "keptPct": 0, "rewrittenAreas": [] },

@@ -9,11 +9,11 @@ export const Basics = z.object({
     name: z.string(),
     type: FunderType,
   }),
-  fundingTotal: z.number().positive(),
-  awardMin: z.number().positive(),
-  awardMax: z.number().positive(),
+  fundingTotal: z.number().min(1),
+  awardMin: z.number().min(1),
+  awardMax: z.number().min(1),
   currency: z.literal("USD"),
-  expectedApplications: z.number().positive().optional(),
+  expectedApplications: z.number().min(1).optional(),
 });
 
 export const EligibilityOp = z.enum(["eq", "in", "lte", "gte", "exists"]);
@@ -50,7 +50,7 @@ export const FormField = z.object({
   type: FieldType,
   required: z.boolean(),
   options: z.array(z.string()).optional(),
-  maxWords: z.number().positive().optional(),
+  maxWords: z.number().min(1).optional(),
   helpText: z.string().optional(),
 });
 
@@ -68,7 +68,7 @@ export const Form = z.object({
 export const RubricCriterion = z.object({
   key: z.string(),
   label: z.string(),
-  weight: z.number().positive(),
+  weight: z.number().min(1),
   description: z.string(),
   formFieldKeys: z.array(z.string()),
 });
@@ -82,11 +82,11 @@ export const ReviewerType = z.enum(["staff", "panel", "committee", "external"]);
 export const AssignmentType = z.enum(["all", "round_robin", "by_category"]);
 
 export const ReviewStage = z.object({
-  order: z.number().int().positive(),
+  order: z.number().int().min(1),
   name: z.string(),
   reviewerType: ReviewerType,
-  reviewersPerApplication: z.number().positive(),
-  panelSize: z.number().positive().optional(),
+  reviewersPerApplication: z.number().min(1),
+  panelSize: z.number().min(1).optional(),
   assignment: AssignmentType,
   advanceRule: z.string(),
 });
@@ -163,6 +163,13 @@ export type FaqItem = z.infer<typeof FaqItem>;
 export type Faq = z.infer<typeof Faq>;
 export type Check = z.infer<typeof Check>;
 
-export function programSectionJsonSchema<T extends z.ZodTypeAny>(schema: T) {
-  return z.toJSONSchema(schema, { target: "draft-7" });
+export interface AnthropicToolInputSchema {
+  type: "object";
+  properties?: unknown;
+  required?: string[];
+  [key: string]: unknown;
+}
+
+export function programSectionJsonSchema<T extends z.ZodTypeAny>(schema: T): AnthropicToolInputSchema {
+  return z.toJSONSchema(schema, { target: "draft-7" }) as AnthropicToolInputSchema;
 }
