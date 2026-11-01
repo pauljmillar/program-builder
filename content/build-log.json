@@ -69,7 +69,7 @@
       "whatHappened": "The PROMPT_CONFLICT rule's regex extraction scans every \"$X\" mention for nearby words like \"fund\" or \"total\" to guess the stated funding total. It didn't exclude mentions already claimed by the award-amount regexes (\"up to $X\", a \"$X-$Y\" range), so a prompt like \"A fund for nonprofits. Awards up to $25,000\" misread the award figure as the fund total too, because the word \"fund\" fell inside that mention's context window.",
       "howCaught": "Unit test for PROMPT_CONFLICT (tests/unit/promptConflict.test.ts): a case asserting the award-max mismatch message contained both the expected and actual numbers failed because the extractor also fired a false fundingTotal mismatch, producing the wrong message at index 0.",
       "fix": "Tracked the index ranges already claimed by award-amount matches and skip any money mention inside those ranges when scanning for a fund total.",
-      "commit": "pending",
+      "commit": "e35c3b6",
       "lesson": "A regex-based extractor needs to track which spans of text it's already consumed, or a second heuristic pass will double-count the same number under a different label."
     }
   ],
