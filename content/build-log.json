@@ -32,7 +32,7 @@
       "date": "2026-11-01",
       "hours": 0.5,
       "phase": "Phase 1: Scaffold",
-      "shipped": "Repo initialized and pushed to GitHub (github.com/pauljmillar/program-builder). Next.js App Router + TypeScript + Tailwind scaffold. Design tokens and free font substitutes (EB Garamond, Inter, JetBrains Mono) wired in. Page shells for /, /why, /build-log, /how-it-works. CI workflow (lint, typecheck, build).",
+      "shipped": "Repo initialized and pushed to GitHub (github.com/pauljmillar/program-builder). Next.js App Router + TypeScript + Tailwind scaffold. Design tokens and free font substitutes (EB Garamond, Inter, JetBrains Mono) wired in. Page shells for /, /why, /build-log, /how-it-works. CI workflow (lint, typecheck, build), green on main. First production deploy to Vercel (program-builder-gamma.vercel.app), connected to the GitHub repo for auto-deploy on push.",
       "tools": ["Claude Code (Sonnet 5)"]
     }
   ],

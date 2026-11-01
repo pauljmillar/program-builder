@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://program-builder.vercel.app";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://program-builder-gamma.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

@@ -8,9 +8,9 @@ Engineering role at Submittable. Concept prototype — not affiliated with or en
 Submittable. No real Submittable API calls are made; the "In Submittable" view is a labeled
 concept mapping, not an integration.
 
-See [`/why`](https://program-builder.vercel.app/why) for the reasoning,
-[`/build-log`](https://program-builder.vercel.app/build-log) for how it was actually built, and
-[`/how-it-works`](https://program-builder.vercel.app/how-it-works) for the architecture and
+See [`/why`](https://program-builder-gamma.vercel.app/why) for the reasoning,
+[`/build-log`](https://program-builder-gamma.vercel.app/build-log) for how it was actually built, and
+[`/how-it-works`](https://program-builder-gamma.vercel.app/how-it-works) for the architecture and
 evaluation results.
 
 ## Running locally
@@ -37,7 +37,7 @@ and `/how-it-works` read directly from the latest committed file — nothing is 
 ## Costs
 
 Hosting is Vercel Hobby + Upstash free tier ($0). Model spend is tracked in
-[`/build-log`](https://program-builder.vercel.app/build-log), split into ideation, build, eval
+[`/build-log`](https://program-builder-gamma.vercel.app/build-log), split into ideation, build, eval
 runs and live demo usage.
 
 ## Stack
