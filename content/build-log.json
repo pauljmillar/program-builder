@@ -54,7 +54,7 @@
       "whatHappened": "`app/layout.tsx` uses Next.js's typed-routes `LayoutProps<'/'>` global, which only exists once Next.js has generated `.next/types` (gitignored). CI ran a standalone `tsc --noEmit` before anything had generated those types, so it failed on `Cannot find name 'LayoutProps'` even though `pnpm build` passed fine locally (build generates the types itself first).",
       "howCaught": "Second CI run still failed, now in the typecheck step specifically, right after fixing the pnpm version issue.",
       "fix": "Added a `next typegen` step before `pnpm typecheck` in CI, which generates just the route types without a full build.",
-      "commit": "pending (fix for 41dd9e0)",
+      "commit": "63ba62e (fix for 41dd9e0)",
       "lesson": "A typed-routes feature means `tsc --noEmit` alone isn't a complete typecheck in CI — it depends on a generation step that `next build`/`next dev` normally does implicitly."
     }
   ],
