@@ -9,11 +9,11 @@ export const Basics = z.object({
     name: z.string(),
     type: FunderType,
   }),
-  fundingTotal: z.number().min(1),
-  awardMin: z.number().min(1),
-  awardMax: z.number().min(1),
+  fundingTotal: z.coerce.number().min(1),
+  awardMin: z.coerce.number().min(1),
+  awardMax: z.coerce.number().min(1),
   currency: z.literal("USD"),
-  expectedApplications: z.number().min(1).optional(),
+  expectedApplications: z.coerce.number().min(1).optional(),
 });
 
 export const EligibilityOp = z.enum(["eq", "in", "lte", "gte", "exists"]);
@@ -50,7 +50,7 @@ export const FormField = z.object({
   type: FieldType,
   required: z.boolean(),
   options: z.array(z.string()).optional(),
-  maxWords: z.number().min(1).optional(),
+  maxWords: z.coerce.number().min(1).optional(),
   helpText: z.string().optional(),
 });
 
@@ -62,13 +62,13 @@ export const FormSection = z.object({
 
 export const Form = z.object({
   sections: z.array(FormSection),
-  estimatedMinutes: z.number().nonnegative(),
+  estimatedMinutes: z.coerce.number().nonnegative(),
 });
 
 export const RubricCriterion = z.object({
   key: z.string(),
   label: z.string(),
-  weight: z.number().min(1),
+  weight: z.coerce.number().min(1),
   description: z.string(),
   formFieldKeys: z.array(z.string()),
 });
@@ -82,11 +82,11 @@ export const ReviewerType = z.enum(["staff", "panel", "committee", "external"]);
 export const AssignmentType = z.enum(["all", "round_robin", "by_category"]);
 
 export const ReviewStage = z.object({
-  order: z.number().int().min(1),
+  order: z.coerce.number().int().min(1),
   name: z.string(),
   reviewerType: ReviewerType,
-  reviewersPerApplication: z.number().min(1),
-  panelSize: z.number().min(1).optional(),
+  reviewersPerApplication: z.coerce.number().min(1),
+  panelSize: z.coerce.number().min(1).optional(),
   assignment: AssignmentType,
   advanceRule: z.string(),
 });

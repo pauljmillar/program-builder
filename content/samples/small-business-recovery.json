@@ -1,0 +1,304 @@
+{
+  "id": "small-business-recovery",
+  "title": "Small business recovery (government)",
+  "prompt": "Kestrel County small business recovery grants: $2M total, awards $5K–$15K, businesses under 50 employees with a valid EIN, staff review, open for 30 days starting Feb 1.",
+  "promptVersion": "v1",
+  "generatedAt": "2026-11-01T23:18:16.264Z",
+  "timings": [
+    {
+      "step": "basics",
+      "ms": 3887
+    },
+    {
+      "step": "eligibility",
+      "ms": 3381
+    },
+    {
+      "step": "form",
+      "ms": 4130
+    },
+    {
+      "step": "rubric",
+      "ms": 4265
+    },
+    {
+      "step": "reviewStages",
+      "ms": 1844
+    },
+    {
+      "step": "timeline",
+      "ms": 4887
+    },
+    {
+      "step": "faq",
+      "ms": 7825
+    }
+  ],
+  "usage": {
+    "inputTokens": 11495,
+    "outputTokens": 3829
+  },
+  "program": {
+    "promptVersion": "v1",
+    "basics": {
+      "name": "Kestrel County Small Business Recovery Grants",
+      "summary": "The Kestrel County Small Business Recovery Grants program provides $5,000 to $15,000 awards to local businesses with fewer than 50 employees and a valid EIN, drawn from a $2 million fund.",
+      "funder": {
+        "name": "Kestrel County Government",
+        "type": "government"
+      },
+      "fundingTotal": 2000000,
+      "awardMin": 5000,
+      "awardMax": 15000,
+      "currency": "USD"
+    },
+    "eligibility": {
+      "rules": [
+        {
+          "id": "employee_count",
+          "label": "Fewer than 50 employees",
+          "field": "employee_count",
+          "op": "lte",
+          "value": 49,
+          "message": "Only businesses with fewer than 50 employees are eligible for this grant."
+        },
+        {
+          "id": "ein",
+          "label": "Valid EIN",
+          "field": "ein",
+          "op": "exists",
+          "value": "true",
+          "message": "Your business must have a valid Employer Identification Number (EIN) to apply."
+        },
+        {
+          "id": "county",
+          "label": "Located in Kestrel County",
+          "field": "county",
+          "op": "eq",
+          "value": "Kestrel County",
+          "message": "This program is for businesses located in Kestrel County."
+        }
+      ]
+    },
+    "form": {
+      "sections": [
+        {
+          "id": "business_info",
+          "title": "Business Information",
+          "fields": [
+            {
+              "key": "business_name",
+              "label": "Legal business name",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "ein",
+              "label": "Employer Identification Number (EIN)",
+              "type": "ein",
+              "required": true,
+              "helpText": "Your 9-digit federal EIN."
+            },
+            {
+              "key": "business_address",
+              "label": "Business address",
+              "type": "address",
+              "required": true
+            },
+            {
+              "key": "county",
+              "label": "County where business is located",
+              "type": "select",
+              "required": true,
+              "options": [
+                "Kestrel County",
+                "Other"
+              ],
+              "helpText": "Only businesses located in Kestrel County are eligible."
+            },
+            {
+              "key": "employee_count",
+              "label": "Number of employees (full- and part-time)",
+              "type": "number",
+              "required": true,
+              "helpText": "Must be fewer than 50."
+            },
+            {
+              "key": "business_description",
+              "label": "Briefly describe your business",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 150
+            }
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Primary Contact",
+          "fields": [
+            {
+              "key": "contact_name",
+              "label": "Contact name",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "contact_email",
+              "label": "Contact email",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "contact_phone",
+              "label": "Contact phone",
+              "type": "short_text",
+              "required": false
+            }
+          ]
+        },
+        {
+          "id": "request",
+          "title": "Grant Request",
+          "fields": [
+            {
+              "key": "requested_amount",
+              "label": "Amount requested",
+              "type": "currency",
+              "required": true,
+              "helpText": "Between $5,000 and $15,000."
+            },
+            {
+              "key": "recovery_need",
+              "label": "Describe how your business has been affected and why you need recovery support",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 300
+            },
+            {
+              "key": "use_of_funds",
+              "label": "How will you use the grant funds?",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 250
+            },
+            {
+              "key": "supporting_documents",
+              "label": "Supporting documents (e.g., business license, recent financial statement)",
+              "type": "file",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "estimatedMinutes": 38.3
+    },
+    "rubric": {
+      "scale": {
+        "min": 1,
+        "max": 5
+      },
+      "criteria": [
+        {
+          "key": "recovery_need",
+          "label": "Severity of impact and need",
+          "weight": 40,
+          "description": "Assess how clearly and credibly the applicant shows the business was harmed and why it needs recovery support. Give higher scores to specific, concrete impacts (lost revenue, closures, damage, lost staff) that are backed by supporting documents where provided. Give lower scores to vague or generic statements.",
+          "formFieldKeys": [
+            "recovery_need",
+            "supporting_documents",
+            "business_description"
+          ]
+        },
+        {
+          "key": "use_of_funds",
+          "label": "Use of funds and feasibility",
+          "weight": 35,
+          "description": "Judge whether the planned use of funds is specific, realistic, and directly tied to the recovery need. Check that the amount requested fits the plan and falls within the program range. Give higher scores to plans that are likely to restore operations.",
+          "formFieldKeys": [
+            "use_of_funds",
+            "requested_amount",
+            "recovery_need"
+          ]
+        },
+        {
+          "key": "business_profile",
+          "label": "Business profile and local fit",
+          "weight": 25,
+          "description": "Review the business description to see what the business does and how it serves the Kestrel County community. Consider the business's size, which should be under 50 employees, and its local roots. Give higher scores to businesses with a clear operating history and local economic role. Confirm that the stated location and employee count are consistent with the program's eligibility rules.",
+          "formFieldKeys": [
+            "business_description",
+            "employee_count",
+            "county",
+            "business_address"
+          ]
+        }
+      ]
+    },
+    "reviewStages": {
+      "stages": [
+        {
+          "order": 1,
+          "name": "Staff Review",
+          "reviewerType": "staff",
+          "reviewersPerApplication": 1,
+          "assignment": "round_robin",
+          "advanceRule": "Meets eligibility (under 50 employees, valid EIN) and passes completeness check; recommended for award within available funds"
+        }
+      ]
+    },
+    "timeline": {
+      "timezone": "America/Chicago",
+      "opensAt": "2027-02-01T09:00:00-06:00",
+      "closesAt": "2027-03-03T09:00:00-06:00",
+      "reviewStartsAt": "2027-03-10T09:00:00-06:00",
+      "decisionAt": "2027-03-31T17:00:00-05:00",
+      "notifyAt": "2027-04-02T09:00:00-05:00"
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "Who can apply?",
+          "a": "Businesses located in Kestrel County that have fewer than 50 employees (full- and part-time combined) and a valid 9-digit federal EIN. If your business is outside Kestrel County, has 50 or more employees, or doesn't have an EIN, you aren't eligible for this program."
+        },
+        {
+          "q": "How much money can I request, and how much is available in total?",
+          "a": "You can request between $5,000 and $15,000. The program has $2 million in total funding from Kestrel County Government. Awards are made within the available funds, so a request isn't guaranteed to be funded in full or at all."
+        },
+        {
+          "q": "When can I apply, and when will I hear back?",
+          "a": "Applications open February 1, 2027 at 9:00 AM Central Time and close March 3, 2027 at 9:00 AM Central Time. Staff review begins March 10, decisions are made by March 31, and applicants are notified starting April 2, 2027 at 9:00 AM Central. Applications submitted after the closing time won't be considered."
+        },
+        {
+          "q": "What will the application ask me for?",
+          "a": "The form has three parts. Business Information covers your legal name, EIN, address, county, employee count, and a description of up to 150 words. Primary Contact covers your name, email, and optionally your phone. Grant Request covers the amount you want, how your business was affected (up to 300 words), and how you'll use the funds (up to 250 words). Plan on about 40 minutes to complete it."
+        },
+        {
+          "q": "Do I have to upload supporting documents?",
+          "a": "No, uploading documents is optional. However, reviewers give higher scores to specific, concrete impacts that are backed up by documents. A business license or a recent financial statement are good examples of what to include."
+        },
+        {
+          "q": "How are applications reviewed and scored?",
+          "a": "County staff review every application. Each application is assigned to one staff reviewer, and assignments are rotated among reviewers. The reviewer first checks that you meet the eligibility rules and that your application is complete. They then score it from 1 to 5 on three criteria. Severity of impact and need counts for 40%. Use of funds and feasibility counts for 35%. Business profile and local fit counts for 25%. Applications are then recommended for award within the available funds."
+        },
+        {
+          "q": "What makes a strong application?",
+          "a": "Be specific. For your recovery need, describe concrete impacts such as lost revenue, closures, damage, or lost staff, and avoid general statements. For your use of funds, give a realistic plan that ties directly to that need, and make sure the amount you request matches the plan and falls between $5,000 and $15,000. In your business description, explain what your business does and how it serves the Kestrel County community."
+        },
+        {
+          "q": "Can I save my work and come back later, or edit after submitting?",
+          "a": "Nothing in the program details says whether you can save a draft or edit after you submit. Because the form takes about 40 minutes, gather your EIN, address, employee count, and any documents beforehand. Submit well before the March 3, 2027 9:00 AM Central deadline."
+        }
+      ]
+    },
+    "check": {
+      "rounds": [
+        {
+          "round": 1,
+          "issues": []
+        }
+      ],
+      "fixed": [],
+      "remaining": []
+    }
+  }
+}

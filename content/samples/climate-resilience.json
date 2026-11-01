@@ -1,0 +1,382 @@
+{
+  "id": "climate-resilience",
+  "title": "Climate resilience fund",
+  "prompt": "Set up a $500K climate resilience fund for nonprofits in Illinois, Indiana and Wisconsin. Two review rounds: staff screening, then a community panel. Open Jan 15 to Mar 1. Awards up to $25K.",
+  "promptVersion": "v1",
+  "generatedAt": "2026-11-01T23:17:46.043Z",
+  "timings": [
+    {
+      "step": "basics",
+      "ms": 4437
+    },
+    {
+      "step": "eligibility",
+      "ms": 2329
+    },
+    {
+      "step": "form",
+      "ms": 5917
+    },
+    {
+      "step": "rubric",
+      "ms": 4435
+    },
+    {
+      "step": "reviewStages",
+      "ms": 1848
+    },
+    {
+      "step": "timeline",
+      "ms": 4187
+    },
+    {
+      "step": "faq",
+      "ms": 7477
+    }
+  ],
+  "usage": {
+    "inputTokens": 12911,
+    "outputTokens": 4316
+  },
+  "program": {
+    "promptVersion": "v1",
+    "basics": {
+      "name": "Midwest Climate Resilience Fund",
+      "summary": "A $500,000 fund offering grants of up to $25,000 to nonprofits in Illinois, Indiana and Wisconsin for climate resilience work, selected through staff screening followed by a community panel review.",
+      "funder": {
+        "name": "Great Lakes Community Foundation",
+        "type": "foundation"
+      },
+      "fundingTotal": 500000,
+      "awardMin": 5000,
+      "awardMax": 25000,
+      "currency": "USD"
+    },
+    "eligibility": {
+      "rules": [
+        {
+          "id": "org_type_nonprofit",
+          "label": "Nonprofit organization",
+          "field": "organization_type",
+          "op": "eq",
+          "value": "nonprofit",
+          "message": "This fund is open only to nonprofit organizations."
+        },
+        {
+          "id": "state_region",
+          "label": "Based in Illinois, Indiana, or Wisconsin",
+          "field": "state",
+          "op": "in",
+          "value": [
+            "IL",
+            "IN",
+            "WI"
+          ],
+          "message": "Applicants must be based in Illinois, Indiana, or Wisconsin."
+        },
+        {
+          "id": "request_amount_max",
+          "label": "Request of $25,000 or less",
+          "field": "requested_amount",
+          "op": "lte",
+          "value": 25000,
+          "message": "Grant requests cannot exceed $25,000."
+        }
+      ]
+    },
+    "form": {
+      "sections": [
+        {
+          "id": "organization",
+          "title": "Organization",
+          "fields": [
+            {
+              "key": "organization_name",
+              "label": "Organization legal name",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "organization_type",
+              "label": "Organization type",
+              "type": "select",
+              "required": true,
+              "options": [
+                "nonprofit",
+                "for_profit",
+                "government",
+                "other"
+              ],
+              "helpText": "This fund is open only to nonprofit organizations."
+            },
+            {
+              "key": "ein",
+              "label": "EIN",
+              "type": "ein",
+              "required": true
+            },
+            {
+              "key": "state",
+              "label": "State where your organization is based",
+              "type": "select",
+              "required": true,
+              "options": [
+                "IL",
+                "IN",
+                "WI",
+                "Other"
+              ],
+              "helpText": "Applicants must be based in Illinois (IL), Indiana (IN), or Wisconsin (WI)."
+            },
+            {
+              "key": "organization_address",
+              "label": "Organization address",
+              "type": "address",
+              "required": true
+            },
+            {
+              "key": "annual_budget",
+              "label": "Annual operating budget",
+              "type": "currency",
+              "required": true
+            }
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Primary contact",
+          "fields": [
+            {
+              "key": "contact_name",
+              "label": "Contact name and title",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "contact_email",
+              "label": "Contact email",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "contact_phone",
+              "label": "Contact phone",
+              "type": "short_text",
+              "required": false
+            }
+          ]
+        },
+        {
+          "id": "project",
+          "title": "Project",
+          "fields": [
+            {
+              "key": "project_title",
+              "label": "Project title",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "requested_amount",
+              "label": "Amount requested (USD)",
+              "type": "currency",
+              "required": true,
+              "helpText": "Maximum $25,000. Minimum $5,000."
+            },
+            {
+              "key": "total_project_budget",
+              "label": "Total project budget",
+              "type": "currency",
+              "required": true
+            },
+            {
+              "key": "project_summary",
+              "label": "Project summary",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 100,
+              "helpText": "Briefly describe your project in plain language."
+            },
+            {
+              "key": "climate_risk_addressed",
+              "label": "Climate risks and community needs addressed",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 300,
+              "helpText": "What climate hazards (e.g., flooding, extreme heat, drought) does your project address, and who is most affected?"
+            },
+            {
+              "key": "project_activities",
+              "label": "Activities, timeline, and expected outcomes",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 400
+            },
+            {
+              "key": "community_engagement",
+              "label": "Community involvement",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 250,
+              "helpText": "How are community members involved in shaping and carrying out this work? This will be read by a community review panel."
+            },
+            {
+              "key": "counties_served",
+              "label": "Counties or communities served",
+              "type": "short_text",
+              "required": true
+            }
+          ]
+        },
+        {
+          "id": "budget",
+          "title": "Budget",
+          "fields": [
+            {
+              "key": "budget_justification",
+              "label": "Budget narrative",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 250,
+              "helpText": "Explain how grant funds would be used."
+            },
+            {
+              "key": "budget_file",
+              "label": "Detailed budget (optional)",
+              "type": "file",
+              "required": false
+            }
+          ]
+        }
+      ],
+      "estimatedMinutes": 65
+    },
+    "rubric": {
+      "scale": {
+        "min": 1,
+        "max": 5
+      },
+      "criteria": [
+        {
+          "key": "climate_need",
+          "label": "Climate risk and community need",
+          "weight": 30,
+          "description": "Assess how clearly the project names specific climate hazards and identifies the communities most affected. Score higher when the need is concrete, well grounded in local conditions, and focused on disproportionately affected populations.",
+          "formFieldKeys": [
+            "climate_risk_addressed",
+            "project_summary",
+            "counties_served"
+          ]
+        },
+        {
+          "key": "community_engagement",
+          "label": "Community involvement",
+          "weight": 25,
+          "description": "Judge how meaningfully community members help shape and carry out the work, beyond consultation or outreach. Favor responses showing community voice in decisions, roles for residents, and plain-language clarity suited to a community panel.",
+          "formFieldKeys": [
+            "community_engagement",
+            "counties_served"
+          ]
+        },
+        {
+          "key": "project_quality",
+          "label": "Project design and feasibility",
+          "weight": 25,
+          "description": "Evaluate whether activities, timeline, and expected outcomes are realistic, specific, and likely to build resilience. Score higher for measurable outcomes and a plan the organization has the capacity to deliver given its size.",
+          "formFieldKeys": [
+            "project_activities",
+            "project_summary",
+            "annual_budget"
+          ]
+        },
+        {
+          "key": "budget_value",
+          "label": "Budget and cost-effectiveness",
+          "weight": 20,
+          "description": "Check that the request is reasonable and clearly explained, and that costs match the proposed activities. Consider the requested amount relative to the total project budget, other funding leveraged, and the value delivered for the dollars.",
+          "formFieldKeys": [
+            "budget_justification",
+            "requested_amount",
+            "total_project_budget",
+            "budget_file"
+          ]
+        }
+      ]
+    },
+    "reviewStages": {
+      "stages": [
+        {
+          "order": 1,
+          "name": "Staff Screening",
+          "reviewerType": "staff",
+          "reviewersPerApplication": 1,
+          "assignment": "round_robin",
+          "advanceRule": "Pass eligibility and completeness check"
+        },
+        {
+          "order": 2,
+          "name": "Community Panel Review",
+          "reviewerType": "panel",
+          "reviewersPerApplication": 7,
+          "panelSize": 7,
+          "assignment": "all",
+          "advanceRule": "Top-ranked applications by average panel score, up to the $500K funding total"
+        }
+      ]
+    },
+    "timeline": {
+      "timezone": "America/Chicago",
+      "opensAt": "2027-01-15T09:00:00-06:00",
+      "closesAt": "2027-03-01T23:59:00-06:00",
+      "reviewStartsAt": "2027-03-15T09:00:00-05:00",
+      "decisionAt": "2027-05-14T17:00:00-05:00",
+      "notifyAt": "2027-05-19T09:00:00-05:00"
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "Who can apply to the Midwest Climate Resilience Fund?",
+          "a": "Nonprofit organizations based in Illinois, Indiana, or Wisconsin. You'll be asked for your organization type, your EIN, and the state where you're based. For-profit businesses, government agencies, and organizations based outside those three states aren't eligible."
+        },
+        {
+          "q": "How much can I request, and how much money is available in total?",
+          "a": "The fund totals $500,000, offered by Great Lakes Community Foundation. You can request between $5,000 and $25,000. Requests over $25,000 aren't eligible. Awards can be up to $25,000, so the fund can support roughly 20 or more projects, depending on the amounts awarded."
+        },
+        {
+          "q": "When does the application open and close, and when will I hear back?",
+          "a": "Applications open January 15, 2027 at 9:00 a.m. Central Time and close March 1, 2027 at 11:59 p.m. Central Time. Review begins March 15, 2027. Final decisions are made May 14, 2027, and all applicants are notified starting May 19, 2027."
+        },
+        {
+          "q": "What does the application involve, and how long will it take?",
+          "a": "Plan on about 65 minutes. The form has sections for your organization, a primary contact, your project, and your budget. The project section has short written answers: a 100-word summary, 300 words on climate risks and community needs, 400 words on activities, timeline, and outcomes, and 250 words on community involvement. The budget section has a 250-word narrative. You can also upload a detailed budget, but that's optional."
+        },
+        {
+          "q": "How are applications reviewed?",
+          "a": "There are two rounds. First, a staff member screens your application for eligibility and completeness. Applications that pass go to a community panel of 7 reviewers. Every panelist reads and scores each application that reaches the panel. The top-ranked applications by average panel score are funded, up to the $500,000 total."
+        },
+        {
+          "q": "What are reviewers looking for?",
+          "a": "Reviewers score each application from 1 to 5 on four criteria. Climate risk and community need counts for 30%. Community involvement counts for 25%. Project design and feasibility counts for 25%. Budget and cost-effectiveness counts for 20%. Name the specific climate hazards you're addressing, such as flooding, extreme heat, or drought. Say who is most affected, and show how residents help shape and carry out the work."
+        },
+        {
+          "q": "Who will read my application, and how should I write it?",
+          "a": "Community panel members will read your application, so write in plain language and avoid jargon. The community involvement answer is written with the panel in mind. Describe real roles and decision-making for community members, not only outreach or consultation."
+        },
+        {
+          "q": "What can I do to avoid being screened out in the first round?",
+          "a": "Confirm that you're a nonprofit based in IL, IN, or WI and that your request is $25,000 or less. Complete every required field, including your EIN, address, annual operating budget, total project budget, and the counties or communities you serve. Staff screen for eligibility and completeness, so incomplete applications won't advance to the panel."
+        }
+      ]
+    },
+    "check": {
+      "rounds": [
+        {
+          "round": 1,
+          "issues": []
+        }
+      ],
+      "fixed": [],
+      "remaining": []
+    }
+  }
+}

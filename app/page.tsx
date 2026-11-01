@@ -1,8 +1,14 @@
 import Eyebrow from "@/components/Eyebrow";
 import StatTile from "@/components/StatTile";
 import Prose from "@/components/Prose";
+import ProgramDemo from "@/components/ProgramDemo";
 import { getAboutStats, readMdx } from "@/lib/content";
-import samples from "@/content/samples-meta.json";
+import type { Sample } from "@/lib/samples";
+import climateResilience from "@/content/samples/climate-resilience.json";
+import smallBusinessRecovery from "@/content/samples/small-business-recovery.json";
+import employeeScholarship from "@/content/samples/employee-scholarship.json";
+
+const samples = [climateResilience, smallBusinessRecovery, employeeScholarship] as unknown as Sample[];
 
 export default function Home() {
   const aboutStats = getAboutStats();
@@ -43,20 +49,12 @@ export default function Home() {
         <div className="mx-auto max-w-5xl">
           <Eyebrow>Try it</Eyebrow>
           <h2 className="mt-4 font-display text-3xl">Pick a sample, watch it build.</h2>
-          <div className="mt-8 grid gap-6 sm:grid-cols-3">
-            {samples.map((s) => (
-              <button
-                key={s.id}
-                className="rounded-2xl border border-mist-gray bg-white p-6 text-left transition hover:border-signal-blue focus-visible:border-signal-blue"
-              >
-                <div className="font-sans text-lg">{s.title}</div>
-                <p className="mt-2 text-sm text-blue-gray">{s.prompt}</p>
-              </button>
-            ))}
+          <div className="mt-8">
+            <ProgramDemo samples={samples} />
           </div>
           <p className="mt-6 text-sm text-blue-gray">
-            Sample replays and the live &quot;write your own&quot; box are on the way — the
-            generation pipeline lands in the next build phase.
+            These 3 replays are real, recorded runs — no model call, no cost. Writing your own
+            program is coming with live mode.
           </p>
         </div>
       </section>

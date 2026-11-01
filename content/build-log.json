@@ -48,6 +48,13 @@
       "phase": "Phase 3: Generation pipeline",
       "shipped": "Sequential 7-step generation pipeline (lib/generate), one Claude tool-use call per section, versioned prompts (lib/prompts/v1), and the checker + repair loop (max 2 rounds). `pnpm build-program \"<prompt>\"` runs it end to end. Verified with two real API calls: a clean sample prompt (zero issues on the first pass) and a deliberately contradictory one (\"$10,000 fund... awards up to $50,000\") that correctly left an unresolvable PROMPT_CONFLICT in `remaining` after 2 repair rounds, rather than silently picking a number.",
       "tools": ["Claude Code (Sonnet 5)"]
+    },
+    {
+      "date": "2026-11-01",
+      "hours": 1.0,
+      "phase": "Phase 4: Samples and replay UI",
+      "shipped": "pnpm record generates the 3 real samples in content/samples/*.json (actual API calls, no fabricated output). Replay UI: StepList, SectionCard, CheckCard, ProgramTabs (Program/JSON/In Submittable), and per-section renderers, orchestrated by ProgramDemo, which replays each sample using its real recorded per-step timings. All 3 samples passed every checker rule on the first try (see finding above) rather than needing a repair-round catch.",
+      "tools": ["Claude Code (Sonnet 5)"]
     }
   ],
   "tools": [
@@ -86,6 +93,22 @@
       "fix": "Changed `.positive()` to `.min(1)` in lib/schema.ts, dropped `strict: true` from the tool definition, and dropped the forced tool_choice entirely (tool_choice defaults to \"auto\", and with exactly one tool offered the model calls it every time in practice).",
       "commit": "d5c3f78",
       "lesson": "The SDK's types don't tell you which JSON Schema keywords or tool_choice modes a given model actually accepts — that only shows up by calling the real API. Budget for this on any new model or SDK version."
+    },
+    {
+      "title": "pnpm record failed on a real sample: the model sent a number as a quoted string",
+      "whatHappened": "The first real `pnpm record` run failed with a ZodError: `expectedApplications` came back from the model as the string \"100\" instead of the number 100, which `z.number()` correctly rejects. Nothing in the tool's JSON Schema forbids a numeric string, and the model treated it as an acceptable way to write the number.",
+      "howCaught": "Running the actual sample-recording script against the live API, not a unit test — the test fixtures only ever construct well-typed objects directly.",
+      "fix": "Switched every model-drafted numeric field in lib/schema.ts from `z.number()` to `z.coerce.number()` (fundingTotal, awardMin, awardMax, expectedApplications, maxWords, weight, order, reviewersPerApplication, panelSize, estimatedMinutes). Confirmed the JSON Schema output is unchanged (still `type: \"number\"`) and that it still correctly rejects non-numeric strings.",
+      "commit": "pending",
+      "lesson": "A model filling in a JSON Schema's `type: \"number\"` can still hand back a numeric-looking string. Coerce at the validation boundary rather than trusting the type the schema asked for."
+    },
+    {
+      "title": "The 3 canonical samples pass every check on the first try — no fabricated \"catch\" added",
+      "whatHappened": "The spec's demo mock-up shows the climate fund sample catching and fixing a rubric problem. In practice, across multiple real recordings (including a manual retry), all 3 canonical sample prompts (climate fund, Kestrel County, Northwind scholarship) generate clean on the first pass: zero errors, zero warnings, nothing for the repair loop to do.",
+      "howCaught": "`pnpm record` and a manual rerun of the climate-fund prompt, both against the live API.",
+      "fix": "Did not invent or inject an issue to force a \"catch\" moment, per spec §0.3 (never fabricate results). Left the Check card able to show a clean pass as a good outcome (\"Passed every check on the first pass\"). The real catch-and-repair demonstration lives in the eval set's deliberately-contradictory cases instead — verified directly with a test prompt (\"$10,000 fund... awards up to $50,000\"), where the checker correctly left an unresolved PROMPT_CONFLICT after 2 repair rounds rather than silently picking a number.",
+      "commit": "pending",
+      "lesson": "A strong model with well-scoped prompts will often just get well-posed inputs right the first time — the checker's value shows up on messier or contradictory input, not on hand-picked clean demo prompts. Don't force a canned failure into a demo that doesn't naturally have one."
     }
   ],
   "keptVsRewritten": { "keptPct": 0, "rewrittenAreas": [] },

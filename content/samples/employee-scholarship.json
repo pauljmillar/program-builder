@@ -1,0 +1,283 @@
+{
+  "id": "employee-scholarship",
+  "title": "Employee scholarship (corporate)",
+  "prompt": "Northwind scholarship for employees' children: 20 awards of $5,000, GPA 3.0 or higher, one essay, blind review by a volunteer employee committee, decisions by May 15.",
+  "promptVersion": "v1",
+  "generatedAt": "2026-11-01T23:18:47.275Z",
+  "timings": [
+    {
+      "step": "basics",
+      "ms": 3260
+    },
+    {
+      "step": "eligibility",
+      "ms": 2148
+    },
+    {
+      "step": "form",
+      "ms": 4714
+    },
+    {
+      "step": "rubric",
+      "ms": 6041
+    },
+    {
+      "step": "reviewStages",
+      "ms": 1943
+    },
+    {
+      "step": "timeline",
+      "ms": 6292
+    },
+    {
+      "step": "faq",
+      "ms": 6612
+    }
+  ],
+  "usage": {
+    "inputTokens": 11304,
+    "outputTokens": 3921
+  },
+  "program": {
+    "promptVersion": "v1",
+    "basics": {
+      "name": "Northwind Scholarship for Employees' Children",
+      "summary": "Northwind awards 20 scholarships of $5,000 each to children of its employees who have a GPA of 3.0 or higher and submit one essay, with blind review by a volunteer employee committee and decisions by May 15.",
+      "funder": {
+        "name": "Northwind",
+        "type": "corporate"
+      },
+      "fundingTotal": 100000,
+      "awardMin": 5000,
+      "awardMax": 5000,
+      "currency": "USD"
+    },
+    "eligibility": {
+      "rules": [
+        {
+          "id": "employee_parent",
+          "label": "Parent is a Northwind employee",
+          "field": "parent_is_northwind_employee",
+          "op": "eq",
+          "value": "yes",
+          "message": "This scholarship is only open to children of Northwind employees."
+        },
+        {
+          "id": "min_gpa",
+          "label": "GPA of 3.0 or higher",
+          "field": "gpa",
+          "op": "gte",
+          "value": 3,
+          "message": "Applicants must have a GPA of 3.0 or higher."
+        },
+        {
+          "id": "essay_submitted",
+          "label": "Essay submitted",
+          "field": "essay",
+          "op": "exists",
+          "value": "essay",
+          "message": "Applicants must submit one essay."
+        }
+      ]
+    },
+    "form": {
+      "sections": [
+        {
+          "id": "eligibility",
+          "title": "Eligibility",
+          "fields": [
+            {
+              "key": "parent_is_northwind_employee",
+              "label": "Is your parent or guardian a current Northwind employee?",
+              "type": "select",
+              "required": true,
+              "options": [
+                "yes",
+                "no"
+              ]
+            },
+            {
+              "key": "gpa",
+              "label": "Current cumulative GPA (4.0 scale)",
+              "type": "number",
+              "required": true,
+              "helpText": "Minimum 3.0 required. Enter as a decimal, e.g., 3.45."
+            }
+          ]
+        },
+        {
+          "id": "applicant",
+          "title": "Applicant and Parent Information",
+          "fields": [
+            {
+              "key": "applicant_name",
+              "label": "Applicant full name",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "applicant_email",
+              "label": "Applicant email",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "applicant_address",
+              "label": "Mailing address",
+              "type": "address",
+              "required": true
+            },
+            {
+              "key": "school_name",
+              "label": "School you attend or will attend",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "expected_graduation_date",
+              "label": "Expected graduation date",
+              "type": "date",
+              "required": false
+            },
+            {
+              "key": "parent_name",
+              "label": "Employee parent/guardian name",
+              "type": "short_text",
+              "required": true
+            },
+            {
+              "key": "parent_employee_id",
+              "label": "Employee parent/guardian Northwind employee ID",
+              "type": "short_text",
+              "required": true,
+              "helpText": "Used only to verify employment. Removed before the committee's blind review."
+            },
+            {
+              "key": "transcript",
+              "label": "Transcript (unofficial is fine)",
+              "type": "file",
+              "required": true,
+              "helpText": "Used to verify GPA. Not shared with reviewers."
+            }
+          ]
+        },
+        {
+          "id": "essay_section",
+          "title": "Essay",
+          "fields": [
+            {
+              "key": "essay",
+              "label": "Essay",
+              "type": "long_text",
+              "required": true,
+              "maxWords": 500,
+              "helpText": "Describe your educational goals and how this scholarship would help you achieve them. Reviews are blind, so do not include your name, your parent's name, or other identifying details."
+            }
+          ]
+        }
+      ],
+      "estimatedMinutes": 30.8
+    },
+    "rubric": {
+      "scale": {
+        "min": 1,
+        "max": 5
+      },
+      "criteria": [
+        {
+          "key": "educational_goals",
+          "label": "Clarity and ambition of educational goals",
+          "weight": 40,
+          "description": "Judge how clearly the applicant describes their educational goals and how specific and realistic the plan is. A 5 shows a well-defined direction with concrete steps and genuine motivation. A 1 is vague or generic.",
+          "formFieldKeys": [
+            "essay"
+          ]
+        },
+        {
+          "key": "scholarship_impact",
+          "label": "Connection between scholarship and goals",
+          "weight": 35,
+          "description": "Assess how convincingly the essay explains how a $5,000 award would help the applicant reach those goals. Give higher scores when the link is specific and credible and the essay shows the difference the award would make. Do not reward hardship stories on their own merit.",
+          "formFieldKeys": [
+            "essay"
+          ]
+        },
+        {
+          "key": "writing_quality",
+          "label": "Writing quality and adherence to instructions",
+          "weight": 25,
+          "description": "Score how organized, clear, and engaging the writing is, and whether it stays within the 500-word limit. Also check that the essay follows the blind-review instruction and leaves out identifying details. Do not penalize minor errors if the ideas come through clearly.",
+          "formFieldKeys": [
+            "essay"
+          ]
+        }
+      ]
+    },
+    "reviewStages": {
+      "stages": [
+        {
+          "order": 1,
+          "name": "Blind committee review",
+          "reviewerType": "committee",
+          "reviewersPerApplication": 3,
+          "assignment": "round_robin",
+          "advanceRule": "Top 20 applications by committee essay score receive awards"
+        }
+      ]
+    },
+    "timeline": {
+      "timezone": "America/Chicago",
+      "opensAt": "2026-11-16T09:00:00-06:00",
+      "closesAt": "2027-02-26T23:59:00-06:00",
+      "reviewStartsAt": "2027-03-15T09:00:00-05:00",
+      "decisionAt": "2027-05-12T17:00:00-05:00",
+      "notifyAt": "2027-05-14T09:00:00-05:00"
+    },
+    "faq": {
+      "items": [
+        {
+          "q": "Who can apply?",
+          "a": "You can apply if your parent or guardian is a current Northwind employee and your cumulative GPA is 3.0 or higher on a 4.0 scale. You also need to submit one essay. If you answer \"no\" to the employee question or enter a GPA below 3.0, you won't be eligible."
+        },
+        {
+          "q": "How much is the scholarship, and how many are awarded?",
+          "a": "Northwind is giving 20 scholarships of $5,000 each, for $100,000 in total. Every award is the same amount."
+        },
+        {
+          "q": "What do I need to submit?",
+          "a": "You'll fill out a short online form with your contact details, school, and your parent or guardian's name and Northwind employee ID. You'll also upload a transcript (an unofficial one is fine) and write one essay of up to 500 words. The form should take about 30 minutes."
+        },
+        {
+          "q": "What should my essay be about?",
+          "a": "Describe your educational goals and how this scholarship would help you reach them. Reviewers look at how clear and realistic your goals are (40%), how convincingly the award connects to those goals (35%), and your writing quality and whether you followed the instructions (25%). A hardship story alone won't earn points. Focus on your plans and what the $5,000 would make possible."
+        },
+        {
+          "q": "Is the review really anonymous?",
+          "a": "Yes. Your parent's employee ID is used only to verify employment, and it's removed before review. Your transcript is used only to verify your GPA, and reviewers don't see it. Please leave your name, your parent's name, and other identifying details out of your essay, because reviewers also check that you followed this instruction."
+        },
+        {
+          "q": "Who reviews applications and how are winners chosen?",
+          "a": "A volunteer committee of Northwind employees reviews the essays. Each application is scored by 3 reviewers using a 1–5 scale on the criteria above. The 20 applications with the highest committee essay scores receive awards."
+        },
+        {
+          "q": "What are the key dates?",
+          "a": "Applications open November 16, 2026 at 9:00 a.m. Central and close February 26, 2027 at 11:59 p.m. Central. Committee review begins March 15, 2027. Decisions are made by May 12, and you'll be notified on May 14, 2027, ahead of the May 15 decision deadline."
+        },
+        {
+          "q": "Can I submit an unofficial transcript, and what if my essay is over the word limit?",
+          "a": "An unofficial transcript is fine. It's used only to confirm that your GPA meets the 3.0 minimum. The essay has a 500-word limit, and reviewers consider whether you stayed within it, so keep your essay at or under 500 words."
+        }
+      ]
+    },
+    "check": {
+      "rounds": [
+        {
+          "round": 1,
+          "issues": []
+        }
+      ],
+      "fixed": [],
+      "remaining": []
+    }
+  }
+}
