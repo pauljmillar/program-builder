@@ -84,7 +84,7 @@
       "whatHappened": "Three real 400s from the Anthropic API on the first live run of the generation pipeline: (1) zod's exclusiveMinimum keyword (from `.positive()`) isn't supported in a tool's input_schema; (2) setting `strict: true` on the tool turned on a much more restricted schema subset that rejected even plain `minimum`; (3) with strict mode removed, the forced `tool_choice: {type: \"tool\", name}` itself came back \"not supported for this model.\"",
       "howCaught": "Running `pnpm build-program` against a real sample prompt with a real API key, per spec §0.7 — not caught by any unit test, since those don't hit the live API.",
       "fix": "Changed `.positive()` to `.min(1)` in lib/schema.ts, dropped `strict: true` from the tool definition, and dropped the forced tool_choice entirely (tool_choice defaults to \"auto\", and with exactly one tool offered the model calls it every time in practice).",
-      "commit": "pending",
+      "commit": "d5c3f78",
       "lesson": "The SDK's types don't tell you which JSON Schema keywords or tool_choice modes a given model actually accepts — that only shows up by calling the real API. Budget for this on any new model or SDK version."
     }
   ],
