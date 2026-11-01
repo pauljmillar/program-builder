@@ -1,0 +1,62 @@
+{
+  "summary": {
+    "totalHours": 0,
+    "calendarDays": 0,
+    "aiCodeKeptPct": 0,
+    "modelSpendUsd": { "ideation": 0, "build": 0, "evals": 0, "liveDemo": 0 },
+    "tokens": { "input": 0, "output": 0, "cacheRead": 0 }
+  },
+  "timeline": [
+    {
+      "date": "2026-10-28",
+      "hours": 1.0,
+      "phase": "Research & ideation",
+      "shipped": "Company and competitor research; three prototype concepts",
+      "tools": ["Claude (Opus 5.5)"]
+    },
+    {
+      "date": "2026-10-29",
+      "hours": 1.0,
+      "phase": "MCP design",
+      "shipped": "MCP server spec with OAuth design and junk-draft guardrails",
+      "tools": ["Claude (Opus 5.5)"]
+    },
+    {
+      "date": "2026-11-01",
+      "hours": 0.5,
+      "phase": "Change of direction",
+      "shipped": "Dropped MCP for a no-setup browser demo (reviewers won't connect an AI tool). Dropped the AI-review idea after finding Submittable already ships Smart Reviewer. Wrote this spec.",
+      "tools": ["Claude (Opus 5.5)"]
+    },
+    {
+      "date": "2026-11-01",
+      "hours": 0.5,
+      "phase": "Phase 1: Scaffold",
+      "shipped": "Repo initialized, pushed to GitHub. Next.js App Router + TypeScript + Tailwind scaffold. Design tokens and free font substitutes (EB Garamond, Inter, JetBrains Mono) wired in. Page shells for /, /why, /build-log, /how-it-works. CI workflow (lint, typecheck, build). First Vercel deploy.",
+      "tools": ["Claude Code (Sonnet 5)"]
+    }
+  ],
+  "tools": [
+    { "tool": "Claude (Opus 5.5) in the Claude app", "usedFor": "Research, ideation, specs" },
+    { "tool": "Claude Code (Sonnet 5)", "usedFor": "Scaffold, schema, checker, generation pipeline, UI, eval harness, deployment" }
+  ],
+  "failures": [],
+  "keptVsRewritten": { "keptPct": 0, "rewrittenAreas": [] },
+  "cost": {
+    "ideation": "",
+    "build": "",
+    "evals": "",
+    "liveDemoToDate": "",
+    "hosting": "Vercel Hobby + Upstash free tier: $0"
+  },
+  "beforeProduction": [
+    "Integration with the real Submittable V4 API behind a feature flag, with contract tests",
+    "Human review of generated rubrics for fairness and plain language before customer use",
+    "An eval set built from real (anonymized) customer programs, run in CI on every prompt or model change, with a release gate",
+    "Tracking edit distance: how much admins change each AI section, as the main quality signal",
+    "Prompt-injection tests (program descriptions that try to override instructions)",
+    "Observability: traces per step (latency, tokens, repair rounds), alerts on cost per program and pass-rate drops",
+    "Accessibility review of generated forms (labels, help text, reading level)",
+    "Per-tenant spend limits and model fallback"
+  ]
+}

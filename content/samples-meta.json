@@ -1,0 +1,17 @@
+[
+  {
+    "id": "climate-resilience",
+    "title": "Climate resilience fund",
+    "prompt": "Set up a $500K climate resilience fund for nonprofits in Illinois, Indiana and Wisconsin. Two review rounds: staff screening, then a community panel. Open Jan 15 to Mar 1. Awards up to $25K."
+  },
+  {
+    "id": "small-business-recovery",
+    "title": "Small business recovery (government)",
+    "prompt": "Kestrel County small business recovery grants: $2M total, awards $5K–$15K, businesses under 50 employees with a valid EIN, staff review, open for 30 days starting Feb 1."
+  },
+  {
+    "id": "employee-scholarship",
+    "title": "Employee scholarship (corporate)",
+    "prompt": "Northwind scholarship for employees' children: 20 awards of $5,000, GPA 3.0 or higher, one essay, blind review by a volunteer employee committee, decisions by May 15."
+  }
+]

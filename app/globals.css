@@ -1,0 +1,105 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  /* Core */
+  --deep-blue: #060f24;
+  --midnight-navy: #131e33;
+  --charcoal: #161616;
+  --white: #ffffff;
+
+  /* Warm neutrals (page backgrounds) */
+  --milk-white: #fcfaf5;
+  --warm-ivory: #f8f4e9;
+  --natural-white: #f3f1e6;
+  --off-white: #f7f5f4;
+  --bone-white: #f6f2f0;
+  --oyster: #f2f0ee;
+  --warm-stone: #e2d6cf;
+  --warm-gray: #cec9c9;
+
+  /* Cool neutrals */
+  --mist-gray: #caced5;
+  --cadet-grey: #a6aab1;
+  --blue-gray: #8a92a2;
+  --pale-blue: #dce6f9;
+
+  /* Accents */
+  --coral-red: #fc5b30;
+  --orange-red: #c93007;
+  --signal-blue: #2e73eb;
+  --sky-blue: #789ee8;
+  --sea-green: #00a9b3;
+  --teal-green: #064a4f;
+  --soft-sage: #868d76;
+  --olive-green: #5e6c4b;
+  --deep-olive: #495638;
+  --amber: #efa20f;
+  --medium-orchid: #c652ab;
+
+  /* Semantic */
+  --background: var(--milk-white);
+  --foreground: var(--deep-blue);
+}
+
+@theme inline {
+  --color-deep-blue: var(--deep-blue);
+  --color-midnight-navy: var(--midnight-navy);
+  --color-charcoal: var(--charcoal);
+  --color-white: var(--white);
+
+  --color-milk-white: var(--milk-white);
+  --color-warm-ivory: var(--warm-ivory);
+  --color-natural-white: var(--natural-white);
+  --color-off-white: var(--off-white);
+  --color-bone-white: var(--bone-white);
+  --color-oyster: var(--oyster);
+  --color-warm-stone: var(--warm-stone);
+  --color-warm-gray: var(--warm-gray);
+
+  --color-mist-gray: var(--mist-gray);
+  --color-cadet-grey: var(--cadet-grey);
+  --color-blue-gray: var(--blue-gray);
+  --color-pale-blue: var(--pale-blue);
+
+  --color-coral-red: var(--coral-red);
+  --color-orange-red: var(--orange-red);
+  --color-signal-blue: var(--signal-blue);
+  --color-sky-blue: var(--sky-blue);
+  --color-sea-green: var(--sea-green);
+  --color-teal-green: var(--teal-green);
+  --color-soft-sage: var(--soft-sage);
+  --color-olive-green: var(--olive-green);
+  --color-deep-olive: var(--deep-olive);
+  --color-amber: var(--amber);
+  --color-medium-orchid: var(--medium-orchid);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-display: var(--font-eb-garamond);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--signal-blue);
+  outline-offset: 2px;
+}
