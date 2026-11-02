@@ -106,7 +106,7 @@
       "whatHappened": "The first real `pnpm record` run failed with a ZodError: `expectedApplications` came back from the model as the string \"100\" instead of the number 100, which `z.number()` correctly rejects. Nothing in the tool's JSON Schema forbids a numeric string, and the model treated it as an acceptable way to write the number.",
       "howCaught": "Running the actual sample-recording script against the live API, not a unit test — the test fixtures only ever construct well-typed objects directly.",
       "fix": "Switched every model-drafted numeric field in lib/schema.ts from `z.number()` to `z.coerce.number()` (fundingTotal, awardMin, awardMax, expectedApplications, maxWords, weight, order, reviewersPerApplication, panelSize, estimatedMinutes). Confirmed the JSON Schema output is unchanged (still `type: \"number\"`) and that it still correctly rejects non-numeric strings.",
-      "commit": "pending",
+      "commit": "1f9daf4",
       "lesson": "A model filling in a JSON Schema's `type: \"number\"` can still hand back a numeric-looking string. Coerce at the validation boundary rather than trusting the type the schema asked for."
     },
     {
@@ -114,7 +114,7 @@
       "whatHappened": "The spec's demo mock-up shows the climate fund sample catching and fixing a rubric problem. In practice, across multiple real recordings (including a manual retry), all 3 canonical sample prompts (climate fund, Kestrel County, Northwind scholarship) generate clean on the first pass: zero errors, zero warnings, nothing for the repair loop to do.",
       "howCaught": "`pnpm record` and a manual rerun of the climate-fund prompt, both against the live API.",
       "fix": "Did not invent or inject an issue to force a \"catch\" moment, per spec §0.3 (never fabricate results). Left the Check card able to show a clean pass as a good outcome (\"Passed every check on the first pass\"). The real catch-and-repair demonstration lives in the eval set's deliberately-contradictory cases instead — verified directly with a test prompt (\"$10,000 fund... awards up to $50,000\"), where the checker correctly left an unresolved PROMPT_CONFLICT after 2 repair rounds rather than silently picking a number.",
-      "commit": "pending",
+      "commit": "1f9daf4",
       "lesson": "A strong model with well-scoped prompts will often just get well-posed inputs right the first time — the checker's value shows up on messier or contradictory input, not on hand-picked clean demo prompts. Don't force a canned failure into a demo that doesn't naturally have one."
     },
     {
@@ -122,7 +122,7 @@
       "whatHappened": "The first real `pnpm eval v1` run (schema-valid rate 94%, final pass rate 90%) had 3 outright failures, all the same root cause: the model responded with plain text instead of a tool_use block. Two were extremely terse one-line prompts (\"Help small businesses recover.\", \"Support for first-generation college students.\") where the model apparently preferred to ask a clarifying question. The third was a repair call on a genuinely impossible award range ($60,000 max from a $40,000 fund), where the model seems to have balked at \"fixing\" something unfixable rather than picking a resolution.",
       "howCaught": "`pnpm eval` against the real 50-case set, not any unit test — this needed real model variance across real prompts to surface.",
       "fix": "Added a one-time retry in lib/generate/callStructured.ts: if a call comes back with no tool_use block, retry once with an explicit nudge not to decline and to make a reasonable assumption. Re-ran the full eval afterward: schema-valid rate went 94% -> 100%, final pass rate 90% -> 94%, contradictions caught 33% -> 50% (both committed results files are kept, so this improvement is visible in the eval history, not just asserted).",
-      "commit": "pending",
+      "commit": "c833d70",
       "lesson": "Even with exactly one tool offered, a model can still choose not to call it, especially on vague or genuinely contradictory input. A retry-with-a-nudge is cheap insurance; the real fix for vagueness is a clearer instruction to always produce an answer, which also shaped prompt v2."
     },
     {
@@ -130,7 +130,7 @@
       "whatHappened": "v2 added one instruction to every prompt: always call the tool and make a reasonable, defensible assumption, even on genuinely contradictory or vague input (the fix for the vague-prompt failures above). On the full 50-case eval, v2's schema-valid rate and final pass rate both came in slightly below v1, and contradictions caught dropped from 50% to 17%. The same instruction that stopped the model from refusing also made it more willing to quietly resolve a stated contradiction during generation — e.g. picking consistent numbers instead of reproducing the prompt's contradictory ones — which means the checker has nothing left to catch. That's the opposite of what this product needs: contradictions should surface for a human, not get smoothed over.",
       "howCaught": "Running the full v2 eval and comparing it to the v1 baseline, both committed for real (content/eval/results-v1-2026-11-02.json vs results-v2-2026-11-02.json).",
       "fix": "Kept v1 as the default prompt version (lib/generate/pipeline.ts's PROMPT_VERSION). v2 stays committed as a real, uncherry-picked comparison point — the retry fix in callStructured.ts (a code change, not a prompt change) is what actually fixed the vague-prompt failures, and it applies to both versions equally.",
-      "commit": "pending",
+      "commit": "c833d70",
       "lesson": "An instruction that fixes one failure mode (refusing to answer) can quietly create another (resolving contradictions it should be surfacing). Measuring the full eval before adopting a prompt change caught this; adopting v2 on the strength of the vague-prompt fix alone would have shipped a regression."
     }
   ],
