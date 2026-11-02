@@ -11,7 +11,7 @@ export default function Footer() {
   return (
     <footer className="bg-deep-blue text-milk-white">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-10 text-sm">
-        <span className="font-mono uppercase tracking-[0.08em] text-blue-gray">
+        <span className="font-mono uppercase tracking-[0.08em] text-cadet-grey">
           Program Builder — Paul Millar
         </span>
         <nav className="flex flex-wrap gap-6">

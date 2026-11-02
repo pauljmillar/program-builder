@@ -69,6 +69,13 @@
       "phase": "Phase 7: Content and build log",
       "shipped": "Added the optional \"My first 90 days\" home-page section (hidden until content/plan.mdx has real content, per spec). Filled in real cost figures in the build log from the 150 real eval cases and 3 recorded samples run so far ($15.35 + $0.29 measured, ideation and the unmeasured ad-hoc debugging calls left as labeled estimates). README updated to match what's actually built (eval:gate, no Playwright claim since no e2e tests exist yet).",
       "tools": ["Claude Code (Sonnet 5)"]
+    },
+    {
+      "date": "2026-11-02",
+      "hours": 1.0,
+      "phase": "Phase 8: Polish",
+      "shipped": "Real `lighthouse` runs against the deployed site found and fixed 3 color-contrast failures in the scraped Submittable brand tokens (see finding above) — all 4 pages now score performance 100 / accessibility 100, with LCP 0.4-0.9s. Wired framer-motion's MotionConfig(reducedMotion=\"user\") so animations actually respect the OS setting, not just a CSS override that framer-motion's JS-driven animations would have ignored. Added Vercel Web Analytics plus sample_clicked and lets_talk_clicked custom events. Replaced the fake \"Watch 45 seconds\" link (which just scrolled to the samples) with an honest modal admitting the video isn't recorded yet.",
+      "tools": ["Claude Code (Sonnet 5)"]
     }
   ],
   "tools": [
@@ -147,6 +154,14 @@
       "fix": "Added `caseSucceeded()` in eval/types.ts: for a case with mustFlag entries, success means every expected code was caught (regardless of finalPassed); for an ordinary case, success still means finalPassed. Rewrote both the subset run and the baseline comparison in eval/gate.ts to use this instead of raw finalPassed rates.",
       "commit": "8947bc9",
       "lesson": "A quality gate that mixes an unconditionally-good outcome (passing cleanly) with a conditionally-good one (correctly flagging something unfixable) needs to know which one applies to a given case, or a subset with a different case mix than the baseline will produce false alarms."
+    },
+    {
+      "title": "Submittable's own scraped brand colors fail WCAG AA contrast as text",
+      "whatHappened": "Running a real Lighthouse audit (not a guess — `npx lighthouse` against the deployed site with Chrome) found 3 real color-contrast failures, all from using Submittable's actual scraped hex values as text: --blue-gray (#8a92a2) as secondary/body text only hits ~3:1 on our light backgrounds and ~3:1 again in the one place it sits on a dark background (the footer) for the opposite reason; --signal-blue (#2e73eb) as link text hits ~4.0-4.4:1; the coral primary button (#fc5b30 bg, white text) hits ~3.1:1. All need 4.5:1 for normal-size text.",
+      "howCaught": "A real `lighthouse` run against the deployed production URL, scoring 95/100 accessibility with color-contrast as the only failing audit — then confirmed the specific failing elements from the audit's own detail output.",
+      "fix": "Darkened --blue-gray to #55606e and --signal-blue to #2257b8 in app/globals.css (both are only ever used as text or as non-text UI needing the lower 3:1 threshold, so darkening doesn't break their other uses). Switched the footer's one dark-background label to --cadet-grey, which already had enough contrast against deep-blue. Bumped the two coral CTA buttons to 19px bold, which crosses WCAG's large-text threshold and drops the requirement to 3:1 — already cleared without changing the brand color at all. Re-ran Lighthouse after each fix until color-contrast actually passed on all 4 pages, not just assumed fixed.",
+      "commit": "pending",
+      "lesson": "A brand's real production colors aren't guaranteed to pass accessibility as text — verify with an actual contrast calculation (or a real audit tool) rather than assuming a scraped hex value is safe to reuse as-is for text, even when it's accurately copied from the source."
     }
   ],
   "keptVsRewritten": {

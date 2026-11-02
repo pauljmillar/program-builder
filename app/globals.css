@@ -21,13 +21,19 @@
   /* Cool neutrals */
   --mist-gray: #caced5;
   --cadet-grey: #a6aab1;
-  --blue-gray: #8a92a2;
+  /* Submittable's scraped value (#8a92a2) only hits ~3:1 contrast on our light
+     backgrounds, below WCAG AA for text. Darkened to clear 4.5:1 everywhere this
+     token is used, which is always as body/secondary text, never a border or fill. */
+  --blue-gray: #55606e;
   --pale-blue: #dce6f9;
 
   /* Accents */
   --coral-red: #fc5b30;
   --orange-red: #c93007;
-  --signal-blue: #2e73eb;
+  /* Submittable's scraped value (#2e73eb) only hits ~4.0-4.4:1 as link text on our
+     light backgrounds, below WCAG AA. Darkened to clear 4.5:1; the focus ring, dots
+     and border uses only need the lower 3:1 non-text threshold, so this doesn't hurt them. */
+  --signal-blue: #2257b8;
   --sky-blue: #789ee8;
   --sea-green: #00a9b3;
   --teal-green: #064a4f;

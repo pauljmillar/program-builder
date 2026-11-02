@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { EB_Garamond, Inter, JetBrains_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Footer from "@/components/Footer";
+import MotionProvider from "@/components/MotionProvider";
 import "./globals.css";
 
 const ebGaramond = EB_Garamond({
@@ -45,8 +47,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${ebGaramond.variable} ${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-milk-white text-deep-blue">
-        <div className="flex-1">{children}</div>
-        <Footer />
+        <MotionProvider>
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );

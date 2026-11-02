@@ -2,6 +2,8 @@ import Eyebrow from "@/components/Eyebrow";
 import StatTile from "@/components/StatTile";
 import Prose from "@/components/Prose";
 import ProgramDemo from "@/components/ProgramDemo";
+import TrackedLink from "@/components/TrackedLink";
+import VideoModal from "@/components/VideoModal";
 import Link from "next/link";
 import { getAboutStats, readMdx } from "@/lib/content";
 import { latestEvalResult } from "@/lib/eval";
@@ -34,16 +36,11 @@ export default function Home() {
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <a
               href="#try-it"
-              className="rounded-lg border-2 border-coral-red bg-coral-red px-8 py-[1.12rem] font-sans text-white transition hover:border-orange-red hover:bg-orange-red"
+              className="rounded-lg border-2 border-coral-red bg-coral-red px-8 py-[1.12rem] font-sans text-[19px] font-bold text-white transition hover:border-orange-red hover:bg-orange-red"
             >
               Try a sample
             </a>
-            <a
-              href="#try-it"
-              className="rounded-lg border-2 border-milk-white px-8 py-[1.12rem] font-sans text-milk-white transition hover:bg-white/10"
-            >
-              Watch 45 seconds
-            </a>
+            <VideoModal />
           </div>
         </div>
       </section>
@@ -109,12 +106,13 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-8 flex flex-wrap gap-4">
-            <a
+            <TrackedLink
+              event="lets_talk_clicked"
               href="mailto:paul.millar@gmail.com"
-              className="rounded-lg border-2 border-coral-red bg-coral-red px-8 py-[0.625rem] font-sans text-white transition hover:border-orange-red hover:bg-orange-red"
+              className="rounded-lg border-2 border-coral-red bg-coral-red px-8 py-[0.625rem] font-sans text-[19px] font-bold text-white transition hover:border-orange-red hover:bg-orange-red"
             >
               Let&apos;s talk
-            </a>
+            </TrackedLink>
             <a
               href="#"
               title="TODO (Paul): add your LinkedIn profile URL"

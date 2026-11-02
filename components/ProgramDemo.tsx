@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { track } from "@vercel/analytics";
 import type { Sample } from "@/lib/samples";
 import { buildStepTimeline } from "@/lib/samples";
 import StepList from "@/components/StepList";
@@ -109,7 +110,10 @@ export default function ProgramDemo({ samples }: { samples: Sample[] }) {
         {samples.map((s) => (
           <button
             key={s.id}
-            onClick={() => setSelectedId(s.id)}
+            onClick={() => {
+              track("sample_clicked", { sampleId: s.id });
+              setSelectedId(s.id);
+            }}
             className="rounded-2xl border border-mist-gray bg-white p-6 text-left transition hover:border-signal-blue focus-visible:border-signal-blue"
           >
             <div className="font-sans text-lg">{s.title}</div>
