@@ -28,11 +28,14 @@ Open [http://localhost:3000](http://localhost:3000).
 ```bash
 pnpm build-program "Set up a $500K climate resilience fund..."   # one program, prints JSON
 pnpm record                                                       # regenerates the 3 recorded samples
-pnpm eval                                                         # runs the 50-case eval set
+pnpm eval v1                                                      # runs the 50-case eval set against prompt v1
+pnpm eval:gate v1                                                 # the 10-case CI subset, compared to the last full run
 ```
 
 Eval results are committed to `content/eval/results-<promptVersion>-<date>.json`. The home page
-and `/how-it-works` read directly from the latest committed file — nothing is hardcoded.
+and `/how-it-works` read directly from the latest committed file for the prompt version actually
+in use — nothing is hardcoded. `eval:gate` runs automatically in CI whenever `lib/prompts/**`
+changes, and fails the build if the pass rate drops more than 10 points.
 
 ## Costs
 
@@ -43,6 +46,7 @@ runs and live demo usage.
 ## Stack
 
 Next.js (App Router, TypeScript strict) · Anthropic API · Zod · Tailwind CSS · Vitest ·
-Playwright · GitHub Actions · Vercel · Upstash Redis (rate limiting, live mode only)
+GitHub Actions · Vercel. Upstash Redis is designed in for live-mode rate limiting but not
+deployed yet — see `/build-log`.
 
 See `program-builder-spec.md` for the full build spec.

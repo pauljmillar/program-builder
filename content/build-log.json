@@ -60,7 +60,14 @@
       "date": "2026-11-02",
       "hours": 1.5,
       "phase": "Phase 6: Eval",
-      "shipped": "50-case eval set (eval/cases.jsonl) matching the spec's category breakdown exactly. pnpm eval runs the full pipeline with bounded concurrency and writes a committed results file. Real v1 baseline: 94% final pass rate, 33% of contradictions caught, $0.098/program. Found and fixed a real bug (the retry fix above), which moved v1 to 94% final pass / 100% schema-valid / 50% contradictions caught. Built and ran prompt v2 as a real comparison — it regressed contradiction-catching to 17%, so v1 stays the default (see finding above). /how-it-works now reads every number from the latest committed eval file, with a real version-comparison chart and 3 real example cases. Added an eval-gate CI workflow that re-runs a fixed 10-case subset for real whenever lib/prompts/** changes, and fails if the pass rate drops more than 10 points against the last committed full run. Copied the MCP server design into docs/mcp-design.md.",
+      "shipped": "50-case eval set (eval/cases.jsonl) matching the spec's category breakdown exactly. pnpm eval runs the full pipeline with bounded concurrency and writes a committed results file. Real v1 baseline: 94% final pass rate, 33% of contradictions caught, $0.098/program. Found and fixed a real bug (the retry fix above), which moved v1 to 94% final pass / 100% schema-valid / 50% contradictions caught. Built and ran prompt v2 as a real comparison — it regressed contradiction-catching to 17%, so v1 stays the default (see finding above). /how-it-works now reads every number from the latest committed eval file, with a real version-comparison chart and 3 real example cases. Added an eval-gate CI workflow that re-runs a fixed 10-case subset for real whenever lib/prompts/** changes, and fails if the pass rate drops more than 10 points against the last committed full run. Copied the MCP server design into docs/mcp-design.md. Caught and fixed a methodology bug in the gate's own pass-rate comparison on its first real CI run (see finding above).",
+      "tools": ["Claude Code (Sonnet 5)"]
+    },
+    {
+      "date": "2026-11-02",
+      "hours": 0.5,
+      "phase": "Phase 7: Content and build log",
+      "shipped": "Added the optional \"My first 90 days\" home-page section (hidden until content/plan.mdx has real content, per spec). Filled in real cost figures in the build log from the 150 real eval cases and 3 recorded samples run so far ($15.35 + $0.29 measured, ideation and the unmeasured ad-hoc debugging calls left as labeled estimates). README updated to match what's actually built (eval:gate, no Playwright claim since no e2e tests exist yet).",
       "tools": ["Claude Code (Sonnet 5)"]
     }
   ],

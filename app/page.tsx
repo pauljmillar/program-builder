@@ -16,6 +16,7 @@ export default function Home() {
   const aboutStats = getAboutStats();
   const aboutBio = readMdx("about.mdx");
   const evalResult = latestEvalResult();
+  const planMarkdown = readMdx("plan.mdx");
 
   return (
     <main>
@@ -131,6 +132,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* My first 90 days — only shown once content/plan.mdx has real content */}
+      {planMarkdown.length > 0 && (
+        <section className="bg-off-white px-6 py-24">
+          <div className="mx-auto max-w-5xl">
+            <Eyebrow>My first 90 days</Eyebrow>
+            <div className="mt-6">
+              <Prose markdown={planMarkdown} />
+            </div>
+          </div>
+        </section>
+      )}
     </main>
   );
 }
