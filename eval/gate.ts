@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { buildProgram } from "../lib/generate/pipeline";
 import gateSubsetIds from "./gate-subset.json";
-import type { EvalCase, EvalResults } from "./types";
+import { caseSucceeded, type EvalCase, type EvalResults } from "./types";
 
 const DROP_THRESHOLD = 0.1;
 
@@ -44,13 +44,18 @@ async function main() {
   let passed = 0;
   for (const c of cases) {
     const result = await buildProgram(c.prompt, promptVersion);
-    const hasErrors = result.program.check.remaining.some((i) => i.severity === "error");
-    if (!hasErrors) passed++;
-    console.error(`${c.id}: ${hasErrors ? "FAIL" : "pass"}`);
+    const finalPassed = !result.program.check.remaining.some((i) => i.severity === "error");
+    const allCodesSeen = new Set(result.program.check.rounds.flatMap((r) => r.issues.map((i) => i.code)));
+    const mustFlag = c.mustFlag ?? [];
+    const mustFlagCaught = mustFlag.filter((code) => allCodesSeen.has(code)).length;
+
+    const succeeded = caseSucceeded({ finalPassed, mustFlagCaught, mustFlagTotal: mustFlag.length });
+    if (succeeded) passed++;
+    console.error(`${c.id}: ${succeeded ? "pass" : "FAIL"}`);
   }
 
   const subsetRate = passed / cases.length;
-  const baselineRate = baseline.metrics.finalPassRate;
+  const baselineRate = baseline.cases.filter((c) => caseSucceeded(c)).length / baseline.cases.length;
   const dropPoints = (baselineRate - subsetRate) * 100;
 
   console.error(

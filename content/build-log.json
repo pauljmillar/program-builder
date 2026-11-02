@@ -1,10 +1,10 @@
 {
   "summary": {
-    "totalHours": 0,
-    "calendarDays": 0,
+    "totalHours": 8.5,
+    "calendarDays": 4,
     "aiCodeKeptPct": 0,
-    "modelSpendUsd": { "ideation": 0, "build": 0, "evals": 0, "liveDemo": 0 },
-    "tokens": { "input": 0, "output": 0, "cacheRead": 0 }
+    "modelSpendUsd": { "ideation": 10, "build": 0.29, "evals": 15.35, "liveDemo": 0 },
+    "tokens": { "input": 1938596, "output": 654490, "cacheRead": 0 }
   },
   "timeline": [
     {
@@ -132,14 +132,27 @@
       "fix": "Kept v1 as the default prompt version (lib/generate/pipeline.ts's PROMPT_VERSION). v2 stays committed as a real, uncherry-picked comparison point — the retry fix in callStructured.ts (a code change, not a prompt change) is what actually fixed the vague-prompt failures, and it applies to both versions equally.",
       "commit": "c833d70",
       "lesson": "An instruction that fixes one failure mode (refusing to answer) can quietly create another (resolving contradictions it should be surfacing). Measuring the full eval before adopting a prompt change caught this; adopting v2 on the strength of the vague-prompt fix alone would have shipped a regression."
+    },
+    {
+      "title": "eval-gate's first real CI run failed on a methodology bug, not a real regression",
+      "whatHappened": "The eval-gate workflow's first live run (triggered by the lib/prompts/v2 commit) failed: 80% subset pass rate vs. a 94% full-run baseline, an apparent 14-point drop. But 2 of the 10 subset cases are deliberately-contradictory prompts (a $10K fund with a $50K award cap; awardMin > awardMax) where \"finalPassed: false\" is the correct outcome — the checker is supposed to leave those unresolved for a human, not quietly fix them. The gate compared raw finalPassed rates, so a subset with a heavier mix of contradictory cases than the full 50-case set looked worse for a reason that had nothing to do with quality.",
+      "howCaught": "The eval-gate GitHub Actions run itself failing on the very commit that added prompt v2 — the first time this gate ran for real.",
+      "fix": "Added `caseSucceeded()` in eval/types.ts: for a case with mustFlag entries, success means every expected code was caught (regardless of finalPassed); for an ordinary case, success still means finalPassed. Rewrote both the subset run and the baseline comparison in eval/gate.ts to use this instead of raw finalPassed rates.",
+      "commit": "pending",
+      "lesson": "A quality gate that mixes an unconditionally-good outcome (passing cleanly) with a conditionally-good one (correctly flagging something unfixable) needs to know which one applies to a given case, or a subset with a different case mix than the baseline will produce false alarms."
     }
   ],
-  "keptVsRewritten": { "keptPct": 0, "rewrittenAreas": [] },
+  "keptVsRewritten": {
+    "keptPct": 100,
+    "rewrittenAreas": [
+      "Provisional: 100% because nothing has been hand-rewritten yet, not because it's all been reviewed. Paul hasn't gone through this line by line — treat this number as 'not yet touched,' not 'verified correct.'"
+    ]
+  },
   "cost": {
-    "ideation": "",
-    "build": "",
-    "evals": "",
-    "liveDemoToDate": "",
+    "ideation": "$6-14 (estimate from the original spec's §11.2 ideation-phase estimate, not separately metered)",
+    "build": "$0.29 measured (the 3 recorded samples) plus roughly a dozen ad-hoc pnpm build-program debugging calls while fixing the API/schema bugs above, not individually logged — call it $1-2 total. Does not include Claude Code's own session token cost for building the site, which isn't visible to this agent in this environment; check Claude Code's own /cost or billing dashboard for that figure.",
+    "evals": "$15.35 measured, across 150 real eval cases (2 full v1 runs + 1 full v2 run) — see content/eval/*.json for the exact per-run figures",
+    "liveDemoToDate": "$0 — live mode isn't deployed yet",
     "hosting": "Vercel Hobby + Upstash free tier: $0"
   },
   "beforeProduction": [
