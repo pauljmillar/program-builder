@@ -138,7 +138,7 @@
       "whatHappened": "The eval-gate workflow's first live run (triggered by the lib/prompts/v2 commit) failed: 80% subset pass rate vs. a 94% full-run baseline, an apparent 14-point drop. But 2 of the 10 subset cases are deliberately-contradictory prompts (a $10K fund with a $50K award cap; awardMin > awardMax) where \"finalPassed: false\" is the correct outcome — the checker is supposed to leave those unresolved for a human, not quietly fix them. The gate compared raw finalPassed rates, so a subset with a heavier mix of contradictory cases than the full 50-case set looked worse for a reason that had nothing to do with quality.",
       "howCaught": "The eval-gate GitHub Actions run itself failing on the very commit that added prompt v2 — the first time this gate ran for real.",
       "fix": "Added `caseSucceeded()` in eval/types.ts: for a case with mustFlag entries, success means every expected code was caught (regardless of finalPassed); for an ordinary case, success still means finalPassed. Rewrote both the subset run and the baseline comparison in eval/gate.ts to use this instead of raw finalPassed rates.",
-      "commit": "pending",
+      "commit": "8947bc9",
       "lesson": "A quality gate that mixes an unconditionally-good outcome (passing cleanly) with a conditionally-good one (correctly flagging something unfixable) needs to know which one applies to a given case, or a subset with a different case mix than the baseline will produce false alarms."
     }
   ],
