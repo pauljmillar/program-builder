@@ -55,6 +55,13 @@
       "phase": "Phase 4: Samples and replay UI",
       "shipped": "pnpm record generates the 3 real samples in content/samples/*.json (actual API calls, no fabricated output). Replay UI: StepList, SectionCard, CheckCard, ProgramTabs (Program/JSON/In Submittable), and per-section renderers, orchestrated by ProgramDemo, which replays each sample using its real recorded per-step timings. All 3 samples passed every checker rule on the first try (see finding above) rather than needing a repair-round catch.",
       "tools": ["Claude Code (Sonnet 5)"]
+    },
+    {
+      "date": "2026-11-02",
+      "hours": 1.5,
+      "phase": "Phase 6: Eval",
+      "shipped": "50-case eval set (eval/cases.jsonl) matching the spec's category breakdown exactly. pnpm eval runs the full pipeline with bounded concurrency and writes a committed results file. Real v1 baseline: 94% final pass rate, 33% of contradictions caught, $0.098/program. Found and fixed a real bug (the retry fix above), which moved v1 to 94% final pass / 100% schema-valid / 50% contradictions caught. Built and ran prompt v2 as a real comparison — it regressed contradiction-catching to 17%, so v1 stays the default (see finding above). /how-it-works now reads every number from the latest committed eval file, with a real version-comparison chart and 3 real example cases. Added an eval-gate CI workflow that re-runs a fixed 10-case subset for real whenever lib/prompts/** changes, and fails if the pass rate drops more than 10 points against the last committed full run. Copied the MCP server design into docs/mcp-design.md.",
+      "tools": ["Claude Code (Sonnet 5)"]
     }
   ],
   "tools": [
@@ -109,6 +116,22 @@
       "fix": "Did not invent or inject an issue to force a \"catch\" moment, per spec §0.3 (never fabricate results). Left the Check card able to show a clean pass as a good outcome (\"Passed every check on the first pass\"). The real catch-and-repair demonstration lives in the eval set's deliberately-contradictory cases instead — verified directly with a test prompt (\"$10,000 fund... awards up to $50,000\"), where the checker correctly left an unresolved PROMPT_CONFLICT after 2 repair rounds rather than silently picking a number.",
       "commit": "pending",
       "lesson": "A strong model with well-scoped prompts will often just get well-posed inputs right the first time — the checker's value shows up on messier or contradictory input, not on hand-picked clean demo prompts. Don't force a canned failure into a demo that doesn't naturally have one."
+    },
+    {
+      "title": "First full 50-case eval: 3 cases failed because the model didn't call the tool at all",
+      "whatHappened": "The first real `pnpm eval v1` run (schema-valid rate 94%, final pass rate 90%) had 3 outright failures, all the same root cause: the model responded with plain text instead of a tool_use block. Two were extremely terse one-line prompts (\"Help small businesses recover.\", \"Support for first-generation college students.\") where the model apparently preferred to ask a clarifying question. The third was a repair call on a genuinely impossible award range ($60,000 max from a $40,000 fund), where the model seems to have balked at \"fixing\" something unfixable rather than picking a resolution.",
+      "howCaught": "`pnpm eval` against the real 50-case set, not any unit test — this needed real model variance across real prompts to surface.",
+      "fix": "Added a one-time retry in lib/generate/callStructured.ts: if a call comes back with no tool_use block, retry once with an explicit nudge not to decline and to make a reasonable assumption. Re-ran the full eval afterward: schema-valid rate went 94% -> 100%, final pass rate 90% -> 94%, contradictions caught 33% -> 50% (both committed results files are kept, so this improvement is visible in the eval history, not just asserted).",
+      "commit": "pending",
+      "lesson": "Even with exactly one tool offered, a model can still choose not to call it, especially on vague or genuinely contradictory input. A retry-with-a-nudge is cheap insurance; the real fix for vagueness is a clearer instruction to always produce an answer, which also shaped prompt v2."
+    },
+    {
+      "title": "Prompt v2 made the eval numbers worse, not better — kept v1 as the default",
+      "whatHappened": "v2 added one instruction to every prompt: always call the tool and make a reasonable, defensible assumption, even on genuinely contradictory or vague input (the fix for the vague-prompt failures above). On the full 50-case eval, v2's schema-valid rate and final pass rate both came in slightly below v1, and contradictions caught dropped from 50% to 17%. The same instruction that stopped the model from refusing also made it more willing to quietly resolve a stated contradiction during generation — e.g. picking consistent numbers instead of reproducing the prompt's contradictory ones — which means the checker has nothing left to catch. That's the opposite of what this product needs: contradictions should surface for a human, not get smoothed over.",
+      "howCaught": "Running the full v2 eval and comparing it to the v1 baseline, both committed for real (content/eval/results-v1-2026-11-02.json vs results-v2-2026-11-02.json).",
+      "fix": "Kept v1 as the default prompt version (lib/generate/pipeline.ts's PROMPT_VERSION). v2 stays committed as a real, uncherry-picked comparison point — the retry fix in callStructured.ts (a code change, not a prompt change) is what actually fixed the vague-prompt failures, and it applies to both versions equally.",
+      "commit": "pending",
+      "lesson": "An instruction that fixes one failure mode (refusing to answer) can quietly create another (resolving contradictions it should be surfacing). Measuring the full eval before adopting a prompt change caught this; adopting v2 on the strength of the vague-prompt fix alone would have shipped a regression."
     }
   ],
   "keptVsRewritten": { "keptPct": 0, "rewrittenAreas": [] },

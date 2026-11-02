@@ -2,7 +2,9 @@ import Eyebrow from "@/components/Eyebrow";
 import StatTile from "@/components/StatTile";
 import Prose from "@/components/Prose";
 import ProgramDemo from "@/components/ProgramDemo";
+import Link from "next/link";
 import { getAboutStats, readMdx } from "@/lib/content";
+import { latestEvalResult } from "@/lib/eval";
 import type { Sample } from "@/lib/samples";
 import climateResilience from "@/content/samples/climate-resilience.json";
 import smallBusinessRecovery from "@/content/samples/small-business-recovery.json";
@@ -13,6 +15,7 @@ const samples = [climateResilience, smallBusinessRecovery, employeeScholarship] 
 export default function Home() {
   const aboutStats = getAboutStats();
   const aboutBio = readMdx("about.mdx");
+  const evalResult = latestEvalResult();
 
   return (
     <main>
@@ -65,16 +68,30 @@ export default function Home() {
           <Eyebrow>How I know it works</Eyebrow>
           <h2 className="mt-4 font-display text-3xl">Measured, not claimed.</h2>
           <p className="mt-4 max-w-2xl text-blue-gray">
-            Tested on 50 program descriptions, from simple to deliberately contradictory. The
-            numbers update every time I change the prompts. Results land here once the eval suite
-            runs for real.
+            Tested on {evalResult?.caseCount ?? 50} program descriptions, from simple to
+            deliberately contradictory. The numbers update every time I change the prompts.
           </p>
           <div className="mt-8 grid gap-6 sm:grid-cols-4">
-            <StatTile value="—" label="Programs that passed every check" />
-            <StatTile value="—" label="Problems caught and fixed automatically" />
-            <StatTile value="—" label="Median build time" />
-            <StatTile value="—" label="Cost per program" />
+            <StatTile
+              value={evalResult ? `${Math.round(evalResult.metrics.finalPassRate * 100)}%` : "—"}
+              label="Programs that passed every check"
+            />
+            <StatTile
+              value={evalResult ? String(evalResult.metrics.problemsFixedAutomatically) : "—"}
+              label="Problems caught and fixed automatically"
+            />
+            <StatTile
+              value={evalResult ? `${(evalResult.metrics.latencyP50Ms / 1000).toFixed(1)}s` : "—"}
+              label="Median build time"
+            />
+            <StatTile
+              value={evalResult ? `$${evalResult.metrics.costPerProgramUsd.toFixed(3)}` : "—"}
+              label="Cost per program"
+            />
           </div>
+          <Link href="/how-it-works" className="mt-6 inline-block text-sm text-signal-blue hover:underline">
+            See the full test results →
+          </Link>
         </div>
       </section>
 

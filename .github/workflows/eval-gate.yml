@@ -1,0 +1,32 @@
+name: Eval gate
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "lib/prompts/**"
+  pull_request:
+    paths:
+      - "lib/prompts/**"
+
+jobs:
+  eval-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run 10-case eval gate against prompt v1
+        run: pnpm eval:gate v1
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MODEL_ID: claude-sonnet-5-5

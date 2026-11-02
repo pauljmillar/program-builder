@@ -1,0 +1,5 @@
+{
+  "instructions": "Paul grades 10 random programs from content/samples and content/eval runs, 1-5, on 'would I launch this with light edits?' Add one entry per program graded below. Not yet filled in — the eval panel treats this as ungraded until it is.",
+  "scale": "1 = unusable, 3 = needs real rework, 5 = ship with light edits",
+  "grades": []
+}

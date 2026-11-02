@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "build-program": "tsx --env-file=.env.local scripts/build-program.ts",
-    "record": "tsx --env-file=.env.local scripts/record-samples.ts"
+    "record": "tsx --env-file=.env.local scripts/record-samples.ts",
+    "eval": "tsx --env-file=.env.local eval/run.ts",
+    "eval:gate": "tsx eval/gate.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.3.0",
